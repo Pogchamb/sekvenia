@@ -1,7 +1,8 @@
-package com.santorence.secveniafilmapp
+package com.santorence.secveniafilmapp.core
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.santorence.secveniafilmapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

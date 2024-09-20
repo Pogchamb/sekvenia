@@ -1,60 +1,108 @@
 package com.santorence.secveniafilmapp.fimsScreen.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.santorence.secveniafilmapp.R
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.santorence.secveniafilmapp.databinding.FragmentFilmsBinding
+import com.santorence.secveniafilmapp.fimsScreen.presentation.viewAdapters.FilmsAdapter
+import com.santorence.secveniafilmapp.fimsScreen.presentation.viewAdapters.GenreAdapter
+import com.santorence.secveniafilmapp.utils.FilmsItemDecorator
+import com.santorence.secveniafilmapp.utils.GenreItem
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FilmsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FilmsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private val viewModel: FilmsViewModel by viewModel()
+    private var _binding: FragmentFilmsBinding? = null
+    private val binding get() = _binding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_films, container, false)
+        _binding = FragmentFilmsBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FilmsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FilmsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val genresList: MutableList<GenreItem> =
+            mutableListOf(
+                GenreItem("комедия", false),
+                GenreItem("приключения", false),
+                GenreItem("фантастика", false),
+                GenreItem("боевик", false),
+                GenreItem("ужасы", false),
+                GenreItem("фэнтези", false),
+                GenreItem("триллер", false),
+                GenreItem("драма", false),
+                GenreItem("детектив", false),
+                GenreItem("криминал", false),
+                GenreItem("биография", false),
+                GenreItem("мелодрама", false)
+            )
+
+        binding?.genreRecycleView?.layoutManager = LinearLayoutManager(requireContext())
+        val genreAdapter = GenreAdapter(genresList).apply {
+            this.onGenreClick = { genre ->
+                viewModel.filterFilmsByGenre(genre)
+            }
+        }
+        binding?.genreRecycleView?.adapter = genreAdapter
+
+
+
+        viewModel.filmsLiveData.observe(viewLifecycleOwner) { filmModels ->
+            val filmsItemDecorator = FilmsItemDecorator(10, 5)
+            binding?.filmsRecyclerView?.addItemDecoration(filmsItemDecorator)
+
+            val sortedByNameFilmsList = filmModels.sortedBy {
+                it.localizedName?.get(0)
+            }
+
+            val filmsAdapter = FilmsAdapter(sortedByNameFilmsList.toMutableList()).apply {
+                this.onFilmClick = { filmModel ->
+                    println(filmModel)
                 }
             }
+            binding?.filmsRecyclerView?.adapter = filmsAdapter
+            println(filmModels)
+
+            viewModel.genreLiveData.observe(viewLifecycleOwner) { genreItem ->
+                val updateGenresList: List<GenreItem> = genresList.map {
+                    if (it.genre == genreItem.genre) {
+                        GenreItem(genreItem.genre, !it.isChecked)
+                    } else {
+                        GenreItem(it.genre, false)
+                    }
+                }
+
+                genreAdapter.setGenreList(updateGenresList.toMutableList())
+                val filteredFilmsList = filmModels.filter {
+                    it.genres.contains(genreItem.genre)
+                }.sortedBy {
+                    it.localizedName?.get(0)
+                }
+
+                if (updateGenresList.map { it.isChecked }.contains(true)) {
+                    filmsAdapter.setFilmsList(filteredFilmsList)
+                } else {
+                    filmsAdapter.setFilmsList(sortedByNameFilmsList)
+                }
+            }
+        }
+
+
+
+
+
+        viewModel.fetchFilms()
     }
 }
+
