@@ -8,7 +8,8 @@
     <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"/>
+        android:layout_gravity="start"
+        android:visibility="gone"/>
 
 
     <com.google.android.material.textview.MaterialTextView
