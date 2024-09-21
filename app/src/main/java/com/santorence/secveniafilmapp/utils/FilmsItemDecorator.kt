@@ -4,7 +4,10 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class FilmsItemDecorator(private val verticalSpaceHeight: Int, private val horizontalSpaceHeight: Int): RecyclerView.ItemDecoration() {
+class FilmsItemDecorator(
+    private val verticalSpaceHeight: Int,
+    private val horizontalSpaceHeight: Int
+) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,

@@ -7,7 +7,7 @@ import com.santorence.secveniafilmapp.R
 import com.santorence.secveniafilmapp.databinding.FilmItemBinding
 import com.santorence.secveniafilmapp.fimsScreen.domain.model.FilmModel
 
-class FilmsViewHolder (
+class FilmsViewHolder(
     private val context: Context,
     private val filmItemBinding: FilmItemBinding,
     private val onFilmClick: (film: FilmModel) -> Unit
@@ -21,7 +21,8 @@ class FilmsViewHolder (
             onFilmClick.invoke(filmModel)
         }
 
-        Glide.with(context).load(filmModel.imageUrl).placeholder(R.drawable.empty_image).into(filmItemBinding.image)
+        Glide.with(context).load(filmModel.imageUrl).placeholder(R.drawable.empty_image)
+            .into(filmItemBinding.image)
     }
 
 

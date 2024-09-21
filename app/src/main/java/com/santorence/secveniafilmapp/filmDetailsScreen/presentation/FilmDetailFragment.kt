@@ -34,11 +34,12 @@ class FilmDetailFragment : Fragment() {
             it.details.text = arg?.description
             it.genre.text = "${arg?.genres?.joinToString(", ")} ${arg?.year}"
             it.localizedName.text = arg?.localizedName
-            it.toolbar.toolbarHeader.text= arg?.localizedName
+            it.toolbar.toolbarHeader.text = arg?.localizedName
             binding?.filmImage?.let { urlFilm ->
-                Glide.with(requireContext()).load(arg?.imageUrl).placeholder(R.drawable.empty_image).into(
-                    urlFilm
-                )
+                Glide.with(requireContext()).load(arg?.imageUrl).placeholder(R.drawable.empty_image)
+                    .into(
+                        urlFilm
+                    )
             }
             it.rating.text = String.format("%.1f", arg?.rating)
             it.toolbar.btnBack.visibility = View.VISIBLE

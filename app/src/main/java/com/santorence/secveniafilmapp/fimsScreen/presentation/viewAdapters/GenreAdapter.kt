@@ -5,15 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.santorence.secveniafilmapp.databinding.GenreItemBinding
+import com.santorence.secveniafilmapp.fimsScreen.domain.model.GenreModel
 import com.santorence.secveniafilmapp.fimsScreen.presentation.viewHolders.GenreViewHolder
-import com.santorence.secveniafilmapp.utils.GenreDiffUtilsCallback
-import com.santorence.secveniafilmapp.utils.GenreItem
+import com.santorence.secveniafilmapp.utils.diffUtils.GenreDiffUtilsCallback
 
-class GenreAdapter(private val genreList: MutableList<GenreItem>): RecyclerView.Adapter<GenreViewHolder>() {
-    var onGenreClick: ((GenreItem) -> Unit) = {genre -> }
+class GenreAdapter(private val genreList: MutableList<GenreModel>) :
+    RecyclerView.Adapter<GenreViewHolder>() {
+    var onGenreClick: ((GenreModel) -> Unit) = { genre -> }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenreViewHolder {
-        val itemBinding = GenreItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return  GenreViewHolder(itemBinding, onGenreClick, parent.context)
+        val itemBinding =
+            GenreItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return GenreViewHolder(itemBinding, onGenreClick, parent.context)
     }
 
     override fun onBindViewHolder(holder: GenreViewHolder, position: Int) {
@@ -25,7 +27,7 @@ class GenreAdapter(private val genreList: MutableList<GenreItem>): RecyclerView.
         return genreList.size
     }
 
-    fun setGenreList(updatedList: MutableList<GenreItem>) {
+    fun setGenreList(updatedList: MutableList<GenreModel>) {
         val diffResult = DiffUtil.calculateDiff(GenreDiffUtilsCallback(genreList, updatedList))
         genreList.clear()
         genreList.addAll(updatedList)

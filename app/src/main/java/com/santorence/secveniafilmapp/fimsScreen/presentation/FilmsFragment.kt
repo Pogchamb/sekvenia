@@ -8,18 +8,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.santorence.secveniafilmapp.R
 import com.santorence.secveniafilmapp.databinding.FragmentFilmsBinding
+import com.santorence.secveniafilmapp.fimsScreen.domain.model.GenreModel
 import com.santorence.secveniafilmapp.fimsScreen.presentation.viewAdapters.FilmsAdapter
 import com.santorence.secveniafilmapp.fimsScreen.presentation.viewAdapters.GenreAdapter
 import com.santorence.secveniafilmapp.utils.FilmsItemDecorator
-import com.santorence.secveniafilmapp.utils.GenreItem
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FilmsFragment : Fragment() {
     companion object {
         const val FILM_KEY = "film"
     }
+
     private val viewModel: FilmsViewModel by viewModel()
     private var _binding: FragmentFilmsBinding? = null
     private val binding get() = _binding
@@ -39,33 +41,28 @@ class FilmsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val genresList: MutableList<GenreItem> =
-            mutableListOf(
-                GenreItem("комедия", false),
-                GenreItem("приключения", false),
-                GenreItem("фантастика", false),
-                GenreItem("боевик", false),
-                GenreItem("ужасы", false),
-                GenreItem("фэнтези", false),
-                GenreItem("триллер", false),
-                GenreItem("драма", false),
-                GenreItem("детектив", false),
-                GenreItem("криминал", false),
-                GenreItem("биография", false),
-                GenreItem("мелодрама", false)
-            )
-
-        binding?.genreRecycleView?.layoutManager = LinearLayoutManager(requireContext())
-        val genreAdapter = GenreAdapter(genresList).apply {
-            this.onGenreClick = { genre ->
-                viewModel.filterFilmsByGenre(genre)
+        viewModel.exceptionLiveData.observe(viewLifecycleOwner) {
+            val snackbar =
+                Snackbar.make(view, getString(it.errorMessage), Snackbar.LENGTH_INDEFINITE)
+            snackbar.setAction(getString(R.string.tryAgain)) {
+                viewModel.fetchFilms()
             }
+            snackbar.setActionTextColor(resources.getColor(R.color.orange))
+            snackbar.show()
         }
-        binding?.genreRecycleView?.adapter = genreAdapter
-
-
 
         viewModel.filmsLiveData.observe(viewLifecycleOwner) { filmModels ->
+            val genreList = filmModels.map { it.genres }.flatMap { it }.toSet().toList().map { gen -> GenreModel(gen, false) }
+                .toMutableList()
+
+            binding?.genreRecycleView?.layoutManager = LinearLayoutManager(requireContext())
+            val genreAdapter = GenreAdapter(genreList).apply {
+                this.onGenreClick = { genre ->
+                    viewModel.filterFilmsByGenre(genre)
+                }
+            }
+            binding?.genreRecycleView?.adapter = genreAdapter
+
             binding?.let {
                 it.filmsLinearLayout.gravity = Gravity.TOP
                 it.toolbar.toolbarHeader.text = getString(R.string.films)
@@ -82,20 +79,23 @@ class FilmsFragment : Fragment() {
 
             val filmsAdapter = FilmsAdapter(sortedByNameFilmsList.toMutableList()).apply {
                 this.onFilmClick = { filmModel ->
-                    findNavController().navigate(R.id.action_filmsFragment_to_filmDetailFragment, Bundle().apply { putSerializable(
-                        FILM_KEY, filmModel) })
-                    println(filmModel)
+                    findNavController().navigate(
+                        R.id.action_filmsFragment_to_filmDetailFragment,
+                        Bundle().apply {
+                            putSerializable(
+                                FILM_KEY, filmModel
+                            )
+                        })
                 }
             }
             binding?.filmsRecyclerView?.adapter = filmsAdapter
-            println(filmModels)
 
             viewModel.genreLiveData.observe(viewLifecycleOwner) { genreItem ->
-                val updateGenresList: List<GenreItem> = genresList.map {
+                val updateGenresList: List<GenreModel> = genreList.map {
                     if (it.genre == genreItem.genre) {
-                        GenreItem(genreItem.genre, !it.isChecked)
+                        GenreModel(genreItem.genre, !it.isChecked)
                     } else {
-                        GenreItem(it.genre, false)
+                        GenreModel(it.genre, false)
                     }
                 }
 
@@ -121,4 +121,5 @@ class FilmsFragment : Fragment() {
         viewModel.fetchFilms()
     }
 }
+
 

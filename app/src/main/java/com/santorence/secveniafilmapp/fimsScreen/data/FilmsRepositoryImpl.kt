@@ -3,6 +3,7 @@ package com.santorence.secveniafilmapp.fimsScreen.data
 import com.santorence.secveniafilmapp.fimsScreen.data.extension.toModel
 import com.santorence.secveniafilmapp.fimsScreen.domain.FilmsRepository
 import com.santorence.secveniafilmapp.fimsScreen.domain.model.FilmModel
+import com.santorence.secveniafilmapp.utils.userExceptions.ConnectionException
 
 class FilmsRepositoryImpl(
     private val remoteDataSource: FilmsRemoteDataSource
@@ -14,8 +15,8 @@ class FilmsRepositoryImpl(
                 it.toModel()
             }
         } catch (e: Exception) {
-            //TODO добавить обработку ошибок
-            emptyList()
+            throw ConnectionException
         }
     }
+
 }

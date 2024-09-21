@@ -1,8 +1,12 @@
-package com.santorence.secveniafilmapp.utils
+package com.santorence.secveniafilmapp.utils.diffUtils
 
 import androidx.recyclerview.widget.DiffUtil
+import com.santorence.secveniafilmapp.fimsScreen.domain.model.FilmModel
 
-class GenreDiffUtilsCallback (private val oldList: List<GenreItem>, private val newList: List<GenreItem>):
+class FilmsDiffUtilsCallback(
+    private val oldList: List<FilmModel>,
+    private val newList: List<FilmModel>
+) :
     DiffUtil.Callback() {
     override fun getOldListSize(): Int {
         return oldList.size
@@ -13,12 +17,12 @@ class GenreDiffUtilsCallback (private val oldList: List<GenreItem>, private val 
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].genre == newList[newItemPosition].genre
+        return oldList[oldItemPosition].localizedName == newList[newItemPosition].localizedName
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return when {
-            oldList[oldItemPosition].isChecked == newList[newItemPosition].isChecked && oldList[oldItemPosition].genre == newList[newItemPosition].genre -> true
+            oldList[oldItemPosition].localizedName == newList[newItemPosition].localizedName -> true
             else -> false
         }
     }

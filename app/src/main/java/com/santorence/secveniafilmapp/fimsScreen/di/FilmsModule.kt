@@ -9,13 +9,12 @@ import com.santorence.secveniafilmapp.fimsScreen.presentation.FilmsViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 val filmsModule = module {
     single<FilmsRepository> {
         return@single FilmsRepositoryImpl(get())
     }
-    single { FilmsRemoteDataSource(createFilmApi()) }
+    single { FilmsRemoteDataSource(createFilmApi(get())) }
     single { GetFilmsUseCase(get()) }
 
     viewModel {
@@ -23,11 +22,6 @@ val filmsModule = module {
     }
 }
 
-private const val url = "https://s3-eu-west-1.amazonaws.com"
-private fun createFilmApi(): FilmsApi {
-    return Retrofit.Builder()
-        .baseUrl(url)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(FilmsApi::class.java)
+private fun createFilmApi(retrofit: Retrofit): FilmsApi {
+    return retrofit.create(FilmsApi::class.java)
 }
