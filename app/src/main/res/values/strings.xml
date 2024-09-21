@@ -4,7 +4,6 @@
     <string name="genres">Жанры</string>
     <string name="films">Фильмы</string>
     <string name="raringName">КиноПоиск</string>
-
     <string name="Connection_Exception">Ошибка подключения к сети</string>
     <string name="tryAgain">Повторить</string>
 

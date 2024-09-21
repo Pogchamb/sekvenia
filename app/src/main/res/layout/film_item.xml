@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="5dp"
+    android:background="@color/white"
     app:strokeWidth="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -11,15 +12,23 @@
         android:layout_height="wrap_content"
         android:padding="2dp">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/imageCardView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/corner_radius"
-            android:scaleType="centerCrop"
+            app:cardCornerRadius="5dp"
+            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                 />
+        </com.google.android.material.card.MaterialCardView>
+
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -29,12 +38,13 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:text="@string/films"
+            android:background="@color/white"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/image"
-            app:layout_constraintStart_toStartOf="@+id/image"
-            app:layout_constraintTop_toBottomOf="@+id/image" />
+            app:layout_constraintEnd_toEndOf="@+id/imageCardView"
+            app:layout_constraintStart_toStartOf="@+id/imageCardView"
+            app:layout_constraintTop_toBottomOf="@+id/imageCardView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
