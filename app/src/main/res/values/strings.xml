@@ -3,6 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="genres">Жанры</string>
     <string name="films">Фильмы</string>
+    <string name="raringName">КиноПоиск</string>
 
 
 </resources>

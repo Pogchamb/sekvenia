@@ -32,6 +32,7 @@
             android:textSize="16sp"
             android:ellipsize="end"
             android:maxLines="2"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/image"
             app:layout_constraintStart_toStartOf="@+id/image"
