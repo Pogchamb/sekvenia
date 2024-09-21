@@ -9,5 +9,19 @@
         android:id="@+id/filmsFragment"
         android:name="com.santorence.secveniafilmapp.fimsScreen.presentation.FilmsFragment"
         android:label="fragment_films"
-        tools:layout="@layout/fragment_films" />
+        tools:layout="@layout/fragment_films" >
+        <action
+            android:id="@+id/action_filmsFragment_to_filmDetailFragment"
+            app:destination="@id/filmDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filmDetailFragment"
+        android:name="com.santorence.secveniafilmapp.filmDetailsScreen.presentation.FilmDetailFragment"
+        android:label="fragment_film_detail"
+        tools:layout="@layout/fragment_film_detail" >
+
+        <action
+            android:id="@+id/action_filmDetailFragment_to_filmsFragment"
+            app:destination="@id/filmsFragment" />
+    </fragment>
 </navigation>
