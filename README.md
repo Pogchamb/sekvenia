@@ -21,4 +21,4 @@
 
 ## Overview
 
-<video src='https://i.imgur.com/nzZRAE6.mp4' width=180/>
+<video src='<a href="https://imgur.com/nzZRAE6"><img src="https://i.imgur.com/nzZRAE6.mp4" title="source: imgur.com" /></a>' width=180/>
