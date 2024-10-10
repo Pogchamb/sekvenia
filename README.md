@@ -1,4 +1,4 @@
-![]([Imgur](https://i.imgur.com/HTIfauU.png))
+![](https://imgur.com/HTIfauU)
 
 ## Stack technologies
 - Kotlin
@@ -21,4 +21,4 @@
 
 ## Overview
 
-<video src='[Imgur](https://i.imgur.com/nzZRAE6.mp4)' width=180/>
+<video src='https://imgur.com/nzZRAE6' width=180/>
